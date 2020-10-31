@@ -1,0 +1,46 @@
+# README
+#1. actionTemplate定义了动作模板Yaml文件的格式。
+#2. 本身采用yaml格式编写
+#3. 动作(Action)是组成活动(Activity)的基本单元，一个活动由若干动作构成。
+#4. 设置值的意义：
+#   - 清空的自定义值：0,'',1900-01-01T00:00:00+08:00
+#   - 强制选项枚举：singleChoice_<程序名>(程序生成单选),multiChoice_<程序名>(程序生成多选),singleChoice_[列表](列表生成单选),multiChoice_[列表](列表生成多选)
+#   - 强制自动填写程序：<强制自动程序名称>（强制自动程序名称格式：自动填写程序名称前加上下划线，如：_<程序名>）
+
+# 机器检查项
+#1. 各值是否预期格式（含是否英文表达的变量名）
+#2. index全局唯一，各方案模板检查
+#3. 直接index是否具备所需的变量值；间接index是否方案选用了所有间接指标，且值正确
+#4. 属性名是否重复、自定义值是否符合要求，强制自动填写程序是否存在，强制选项枚举是否有选项配置文件的配置
+#5. actions参数表是否符合action程序的参数顺序、数量，名称是否不重复
+
+
+#actionTemplate
+actionTempName: '' #动作模板名称(Activity 局部唯一)，也是action的程序名
+activityType: singleChoice_actTypeList #方案全局唯一，action模板对应某类活动类型,由actTypeList程序生成
+activityObj: multiChoice_actObjList #内部员工、客户等，由actObjList程序生成
+
+#以下是活动动作设置（是一个对象数组，表述每个活动动作的属性名、释义以及值）
+actions: [''] #action函数的参数名别称列表，用户可自定义列表，根据程序模块需要的参数名按顺序一一匹配，不求名字一致
+actionTab: false #是否采用表格形式(true/false)
+descTemp: '' #由各动作(Action)变量值组合成的自然语言描述模板，采用python %s通配符方法表示
+
+
+#以下是财务表合并变量算法设置（依据此算法进行财务预算计算,运算的变量来自于actions的actionVar动作变量名称，支持四则运算、常用统计聚类运算）,计算机会根据不同变量名自动聚类加总计算
+financialSetup:
+  item: '' #项目的名称设定（自然语言）
+  unit: '' #单价变量表达式
+  amount: '' #数量变量表达式
+  memo: '' #备注 
+  Source: singleChoice_[] #采用预算表中的设定值，几大预算归口
+
+#以下是合并指标变量算法设置（依据此算法进行合并评估指标计算，变量来源于actions和financial变量）
+indexSetup:
+  -
+    indexName: '' #指标名，从indexTemplate中选择的名称，唯一性
+    indexVal: '' #指标值运算表达式，主要用于间接指标，即从方案中获取指标值计算方法，支持四则运算和聚类运算，字符串；若间接指标，直接引用
+    indexFormat: '' #指标值显示格式，例如：0.0%,0.00,0等
+    isMain: false #是否是主要结案指标（true/false）
+
+  
+    

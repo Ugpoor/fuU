@@ -1,0 +1,82 @@
+#README
+#1. campTemplate是一个示范性文档，示范一个方案模板的格式。
+#2. 采用yaml格式编写
+#3. 所有营销活动方案，都需要遵循方案模板的格式
+#4. 设置值的意义：
+#   - 清空的自定义值：0,'',1900-01-01T00:00:00+08:00
+#   - 强制选项枚举：singleChoice_<程序名>(程序生成单选),multiChoice_<程序名>(程序生成多选),singleChoice_[列表](列表生成单选),multiChoice_[列表](列表生成多选)
+#   - 强制自动填写程序：<强制自动程序名称>（强制自动程序名称格式：自动填写程序名称前加上下划线，如：_<程序名>）
+
+#自动化设置
+#1.replaySetup 对于replaySch复盘日程的设定
+#2.专案概要campBrief的计算
+#3.动作(Action)到活动(Activity)的合并计算，自然语言、财务项、指标等
+#4.活动(Activity)的合并财务、合并指标计算
+#5.附件(acce)的同步处理
+
+#campTemplate
+templateVer: '' #版本号
+campLink: '' #方案存储的文件夹
+campHead: #活动文件头信息
+  Title: '' #方案的标题
+  id: autoId #方案编号，由autoId程序提供
+  fid: '' #关联的方案编号
+editHis: #编辑历史（对象数组）
+  - 
+    authorName: recordHis #作者姓名，由recordHis程序提供
+    authorDep: recordHis #作者部门，由recordHis程序提供
+    authorId: recordHis #作者工号,由recordHis程序提供
+    processCode: recordHis #流程状态 （起草、提报、已审、待结、复盘），由recordHis程序提供
+    authorDate: recordHis # 2020-00-17T15:02:31+08:00 (完成日期),由recordHis程序提供
+campBrief: #方案概要
+  manualDesc: '' #手工描述
+  autoDesc: autoCon #由各活动动作组件自然语言描述概述合并而来,由autoCon程序提供
+  campStartDate: 1900-01-01 #专案开始日期
+  campEndDate: 1900-01-01 #专案结束日期
+  targetObj: autoCon #针对客群（由各活动动作组件合并而来）,由autoCon程序提供
+activities: #活动(Acitivities)
+  - 
+    actStartDate: 1900-01-01 #活动开始日期
+    actEndDate: 1900-01-01 #活动结束日期
+    actAddr: '' #活动地址
+    actObj: multiChoice_genObjList #活动涉及的活动对象标签,由genObjList提供选项，多选
+    actDsc: autoDesc #活动描述，由actions的descTemp汇总定义的自然语言描述，由autoDesc程序提供自动概述
+    actionList: #动作列表
+      -
+        actionTempName: singleChoice_chooseAction #动作模板名称,由chooseAction提供选项，单选
+          - 
+            {genActions} #动作对象，由actionTemplate文件的actions定义属性名，actions列表即对象的属性名称，动作变量值，与actionTemplate对应。由genActions程序提供Action定义清单。
+conBudget: #预算
+  finItems: #预算财务表
+    -
+      item: autoCon #项目,由autoCon程序提供
+      unit: autoCon  #单价,由autoCon程序提供
+      amount: autoCon #数量,由autoCon程序提供
+      total: autoCon #总计,由autoCon程序提供
+      Source: autoCon #预算归口,由autoCon程序提供
+      memo: '' #备注，可手写添加
+  subtotal: autoCon #合计,由autoCon程序提供
+  finSource: #财务归口
+    - 
+      Source: autoCon #归口,由autoCon程序提供
+      amount: autoCon #金额,由autoCon程序提供
+      percentage: autoCon #占比,由autoCon程序提供
+conIndex: #合并指标
+  idexes: #指标集合
+    - 
+      indexName: autoCon #指标名称,由autoCon程序提供
+      indexVal: autoCon #指标值(string,decimal,percentage),由autoCon程序提供
+      isMain: autoCon #是否主要评估指标(true/false),由autoCon程序提供
+acce: #附件列表
+  -
+    acceLink: acceUploader #附件地址，由acceUploader定义
+    acceName: acceUploader #附件名称,由acceUploader定义
+    acceFP: acceUploader #附件的文档指纹,由acceUploader定义
+replaySetup: #复盘设置
+  -
+    replayid: recordHis #复盘编号，可以用自然语言表达，便于理解，局部唯一性
+    replayDate: recordHis #2020-10-17 (复盘日期),由recordHis程序提供
+stauts: recordHis #状态(起草、提报、已审、待结、复盘),由recordHis程序提供
+
+
+
